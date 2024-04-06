@@ -51,15 +51,15 @@ function isSalaryRangeInRange(salaryRangeString, min, max) {
 }
 
 // 定义黑名单列表
-const blacklist = ['react', 'angular', 'flutter', 'cocos', 'laya', '白鹭', 'gis', 'geo', 'webgl', '2d', '3d', '三维', '区块链', '鸿蒙', 'harmonyos', '兼职', '游戏', 'MES', '日结', '大数据',
-'全栈', '英语', '口语', '外包', '劳务', '派遣', '驻场', '后端', '后台', 'UI', '设计', '初级', '实习生', 'java', 'go', 'goLang', 'python', 'php', '安卓', '苹果', 'android', 'ios'];
+const blacklist = ['react', 'angular', 'flutter', 'cocos', 'laya', 'lay', '白鹭', 'gis', 'geo', 'webgl', '2d', '3d', '三维', '区块链', '鸿蒙', 'harmonyos', '兼职', '游戏', 'MES', '日结', '大数据',
+'全栈', '软件', '英语', '口语', '外包', '劳务', '派遣', '驻场', '后端', '后台', 'UI', '设计', '初级', '实习生', 'net', 'c++', 'java', 'go', 'goLang', 'python', 'php', '安卓', '苹果', 'android', 'ios'];
 
 // 判断字符串是否在黑名单列表内的函数
 function isInBlacklist(str) {
   // 将字符串转换为小写
   const lowerCaseStr = str.toLowerCase();
   // 使用some()方法遍历黑名单列表，判断是否存在
-  return blacklist.some(item => lowerCaseStr.includes(item.toLowerCase()));
+  return str.includes("前端") ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
 }
 
 async function clickButtons() {

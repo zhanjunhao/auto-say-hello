@@ -1,6 +1,6 @@
 const isAutoNextPage = true // 是否自动下一页
-const minSalary = 15; // 最小薪资
-const maxSalary = 20; // 最大薪资
+const minSalary = 14; // 最小薪资
+const maxSalary = 25; // 最大薪资
 
 // 点击按钮触发沟通
 function triggerSay(btn) {
@@ -39,7 +39,7 @@ function isSalaryRangeInRange(salaryRangeString, min, max) {
   if (match) {
     const startSalary = parseInt(match[1]);
     const endSalary = parseInt(match[2]);
-    
+
     return (startSalary >= min && startSalary <= max) || (endSalary >= min && endSalary <= max);
   } else if (salaryRangeString === '面议') {
     // console.log("面议薪资范围无法比较");
@@ -59,7 +59,7 @@ function isInBlacklist(str) {
   // 将字符串转换为小写
   const lowerCaseStr = str.toLowerCase();
   // 使用some()方法遍历黑名单列表，判断是否存在
-  return str.includes("前端") ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
+  return ["前端","h5","web"].some(item => lowerCaseStr.indexOf(item.toLowerCase) > -1) ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
 }
 
 async function clickButtons() {
@@ -86,8 +86,31 @@ async function clickButtons() {
 // 点击下一页 触发翻页事件
 function clickNextPage () {
   let nextPageEle = document.querySelector('.options-pages .ui-icon-arrow-right').closest('a')
-  if (!nextPageEle.className.includes('disabled')) { // 如果是最后一页了
+  if (!nextPageEle.className.includes('disabled')) { // 如果不是最后一页
     nextPageEle.closest('a').click()
+  } else { // 如果是最后一页了 刷新浏览器重定向到第一页
+    let url = window.location.href;
+
+    // 剔除 page 参数
+    let parsedUrl = document.createElement('a');
+    parsedUrl.href = url;
+    let queryParams = parsedUrl.search.substr(1).split('&');
+    let updatedQueryParams = [];
+    for (let i = 0; i < queryParams.length; i++) {
+      let param = queryParams[i];
+      if (param.indexOf('page=') !== 0) {
+        updatedQueryParams.push(param);
+      }
+    }
+
+    // 为 page 参数重新赋值
+    let newPageValue = '1';
+    updatedQueryParams.push('page=' + newPageValue);
+
+    // 重新构建 URL
+    let newUrl = parsedUrl.origin + parsedUrl.pathname + '?' + updatedQueryParams.join('&') + parsedUrl.hash;
+    // console.log(newUrl);
+    window.location.replace(newUrl);
   }
 }
 

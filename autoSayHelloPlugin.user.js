@@ -13,8 +13,8 @@
   window.onload = () => {
     setTimeout(() => {
       const isAutoNextPage = true // 是否自动下一页
-      const minSalary = 14; // 最小薪资
-      const maxSalary = 25; // 最大薪资
+      const minSalary = 13; // 最小薪资
+      const maxSalary = 20; // 最大薪资
       
       // 点击按钮触发沟通
       function triggerSay(btn) {
@@ -73,7 +73,7 @@
         // 将字符串转换为小写
         const lowerCaseStr = str.toLowerCase();
         // 使用some()方法遍历黑名单列表，判断是否存在
-        return ["前端","h5","web"].some(item => lowerCaseStr.indexOf(item.toLowerCase) > -1) ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
+        return ["前端","h5","web"].some(keyword => lowerCaseStr.includes(keyword.toLowerCase())) ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
       }
       
       async function clickButtons() {

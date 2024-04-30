@@ -1,6 +1,7 @@
 const isAutoNextPage = true // 是否自动下一页
-const minSalary = 13; // 最小薪资
+const minSalary = 14; // 最小薪资
 const maxSalary = 20; // 最大薪资
+const triggerInterval = 3000; // 触发间隔时间
 
 // 点击按钮触发沟通
 function triggerSay(btn) {
@@ -27,7 +28,7 @@ function triggerSay(btn) {
           }
         }
       }
-    }, 1000);
+    }, triggerInterval);
   });
 }
 
@@ -35,7 +36,7 @@ function triggerSay(btn) {
 function isSalaryRangeInRange(salaryRangeString, min, max) {
   const regex = /(\d+)-(\d+)(?:K)?/;
   const match = salaryRangeString.match(regex);
-  
+
   if (match) {
     const startSalary = parseInt(match[1]);
     const endSalary = parseInt(match[2]);
@@ -87,31 +88,36 @@ async function clickButtons() {
 function clickNextPage () {
   let nextPageEle = document.querySelector('.options-pages .ui-icon-arrow-right').closest('a')
   if (!nextPageEle.className.includes('disabled')) { // 如果不是最后一页
-    nextPageEle.closest('a').click()
-  } else { // 如果是最后一页了 刷新浏览器重定向到第一页
-    let url = window.location.href;
+    setTimeout(() => {
+      nextPageEle.closest('a').click()
+    }, 2000)
+  } 
+  // else { // 如果是最后一页了 刷新浏览器重定向到第一页
+  //   setTimeout(() => {
+  //     let url = window.location.href;
+    
+  //     // 剔除 page 参数
+  //     let parsedUrl = document.createElement('a');
+  //     parsedUrl.href = url;
+  //     let queryParams = parsedUrl.search.substr(1).split('&');
+  //     let updatedQueryParams = [];
+  //     for (let i = 0; i < queryParams.length; i++) {
+  //       let param = queryParams[i];
+  //       if (param.indexOf('page=') !== 0) {
+  //         updatedQueryParams.push(param);
+  //       }
+  //     }
 
-    // 剔除 page 参数
-    let parsedUrl = document.createElement('a');
-    parsedUrl.href = url;
-    let queryParams = parsedUrl.search.substr(1).split('&');
-    let updatedQueryParams = [];
-    for (let i = 0; i < queryParams.length; i++) {
-      let param = queryParams[i];
-      if (param.indexOf('page=') !== 0) {
-        updatedQueryParams.push(param);
-      }
-    }
+  //     // 为 page 参数重新赋值
+  //     let newPageValue = '1';
+  //     updatedQueryParams.push('page=' + newPageValue);
 
-    // 为 page 参数重新赋值
-    let newPageValue = '1';
-    updatedQueryParams.push('page=' + newPageValue);
-
-    // 重新构建 URL
-    let newUrl = parsedUrl.origin + parsedUrl.pathname + '?' + updatedQueryParams.join('&') + parsedUrl.hash;
-    // console.log(newUrl);
-    window.location.replace(newUrl);
-  }
+  //     // 重新构建 URL
+  //     let newUrl = parsedUrl.origin + parsedUrl.pathname + '?' + updatedQueryParams.join('&') + parsedUrl.hash;
+  //     // console.log(newUrl);
+  //     window.location.replace(newUrl);
+  //   }, 5000)
+  // }
 }
 
 clickButtons();
@@ -141,3 +147,7 @@ setInterval(() => {
     }, 2000)
   }
 }, 1000); // 每秒检测一次
+
+// 用于未登录获取职位列表 覆盖旧的dom的方式 需手动点击沟通
+// let list = [...document.querySelectorAll(".job-card-body > a")]
+// list.forEach(ele => ele.click())

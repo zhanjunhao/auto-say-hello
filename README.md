@@ -1,11 +1,7 @@
 # autoSayHello
 boss直聘 自动打招呼脚本 减少颈椎的劳损 适用于前端开发(内卷找工作)
 
-## 使用方式一
-1、打开 https://www.zhipin.com/web/geek/job?query=%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91 相关求职页面
-2、浏览器 F12打开控制台 复制autoSayHello.js代码 回车执行即可
-
-## 使用方式二
+## 使用方式
 1、浏览器 安装猴油插件 Tampermonkey 
 2、找到autoSayHelloPlugin.user.js文件 如下操作：
 [![pF72DDs.png](https://s21.ax1x.com/2024/04/01/pF72DDs.png)](https://imgse.com/i/pF72DDs)

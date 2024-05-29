@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         boss直聘 自动打招呼脚本 减少颈椎的劳损 适用于前端开发(内卷找工作)
 // @namespace    http://tampermonkey.net/
-// @version      2024-05-28
+// @version      2024-05-29
 // @description  try to take over the world!
 // @author       wood
 // @match        https://www.zhipin.com/web/geek/job*
@@ -144,30 +144,20 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
       }
 
+      // 保存当前的 page 参数值
       let currentPage = getParameterByName('page');
-      const aElements = document.querySelectorAll('.options-pages a');
-      
-      // 创建函数来封装事件处理逻辑
-      function createClickHandler(page) {
-        return function(event) {
-          let newPage = event.target.innerText;
-          if (newPage !== page) {
-            console.log('page 参数发生变化：' + page + ' -> ' + newPage);
-            page = newPage;
-            setTimeout(() => {
-              clickButtons();
-            }, 2000);
-          }
-        };
-      }
-      
-      // 遍历所有a元素并为其绑定点击事件
-      for (let i = 0; i < aElements.length; i++) {
-        if (aElements[i].innerText.trim().match(/^\d+$/) !== null) {
-          // 为每个a元素创建一个事件处理程序
-          aElements[i].addEventListener('click', createClickHandler(currentPage));
+
+      // 检测 page 参数的变化
+      setInterval(() => {
+        let newPage = getParameterByName('page');
+        if (newPage !== currentPage) {
+          console.log('page 参数发生变化：' + currentPage + ' -> ' + newPage);
+          currentPage = newPage;
+          setTimeout(() => {
+            clickButtons();
+          }, 2000)
         }
-      }
+      }, 1000); // 每秒检测一次
     }, 2000)
   }
 })();

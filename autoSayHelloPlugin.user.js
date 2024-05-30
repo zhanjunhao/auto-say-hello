@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         boss直聘 自动打招呼脚本 减少颈椎的劳损 适用于前端开发(内卷找工作)
 // @namespace    http://tampermonkey.net/
-// @version      2024-05-29
+// @version      2024-05-30
 // @description  try to take over the world!
 // @author       wood
 // @match        https://www.zhipin.com/web/geek/job*
@@ -15,7 +15,13 @@
     setTimeout(() => {
       const minSalary = 14; // 最小薪资
       const maxSalary = 20; // 最大薪资
-      const triggerInterval = 3000; // 触发间隔时间
+
+      function getRandomInterval(min1, max2) {
+        // 生成一个3000到5000毫秒之间的随机整数
+        const min = min1 || 3000;
+        const max = max2 || 5000;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
 
       // 点击按钮触发沟通
       function triggerSay(btn) {
@@ -42,7 +48,7 @@
                 }
               }
             }
-          }, triggerInterval);
+          }, getRandomInterval());
         });
       }
 
@@ -102,11 +108,9 @@
         if (!nextPageEle.className.includes('disabled')) { // 如果不是最后一页
           setTimeout(() => nextPageEle.closest('a').click(), 2000)
         } else { // 如果是最后一页了 刷新浏览器重定向到第一页
-          let url = window.location.href;
-        
           // 剔除 page 参数
           let parsedUrl = document.createElement('a');
-          parsedUrl.href = url;
+          parsedUrl.href = window.location.href;
           let queryParams = parsedUrl.search.substr(1).split('&');
           let updatedQueryParams = [];
           for (let i = 0; i < queryParams.length; i++) {
@@ -117,17 +121,13 @@
           }
 
           // 为 page 参数重新赋值
-          let newPageValue = '1';
-          updatedQueryParams.push('page=' + newPageValue);
-
+          updatedQueryParams.push('page=' + 1);
           // 重新构建 URL
-          let newUrl = parsedUrl.origin + parsedUrl.pathname + '?' + updatedQueryParams.join('&') + parsedUrl.hash;
-          let updateCount = sessionStorage.getItem('updateCount') ? +sessionStorage.getItem('updateCount') : 0
-          sessionStorage.setItem('updateCount', updateCount+1);
+          const newUrl = parsedUrl.origin + parsedUrl.pathname + '?' + updatedQueryParams.join('&') + parsedUrl.hash;
 
           setTimeout(() => {
             window.location.replace(newUrl);
-          }, updateCount === 1 ? 5000 : updateCount * 5000)
+          }, getRandomInterval(5000, 10000))
         }
       }
 

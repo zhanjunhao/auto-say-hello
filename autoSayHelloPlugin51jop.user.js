@@ -19,6 +19,7 @@
 
   // 自动投递简历的异步函数
   async function autoSend() {
+    bindEvent();
     let count = 0; // 投递成功的公司数量
     const jobList = document.querySelectorAll(".joblist .joblist-item"); // 获取职位列表
     for (let item of jobList) {
@@ -53,8 +54,12 @@
   function clickNextPage() {
     const activePageEle = document.querySelector('.el-pager li[class*="active"]');
     if (activePageEle) {
-      activePageEle.classList.remove('active');
-      activePageEle.nextElementSibling && activePageEle.nextElementSibling.click();
+      if (activePageEle.nextElementSibling) { // 不是最后一页
+        activePageEle.classList.remove('active');
+        activePageEle.nextElementSibling.click();
+      } else { // 当前是最后一页
+        window.location.reload()
+      }
     }
   }
 
@@ -97,19 +102,21 @@
     if (style.width === '0px' || style.height === '0px') {
       return false;
     }
-
+    
     // 如果以上检查都通过了，那么元素应该是显示的
     return true;
   }
 
   // 为分页按钮添加点击事件，翻页后延迟执行自动投递
-  const pageButton = document.querySelectorAll(".el-pager li");
-  for (const btn of pageButton) {
-    btn.addEventListener("click", () => {
-      if (!btn.classList.contains('active')) {
-        setTimeout(autoSend, 2000);
-      }
-    });
+  function bindEvent () {
+    const pageButton = document.querySelectorAll(".el-pager li");
+    for (const btn of pageButton) {
+      btn.addEventListener("click", () => {
+        if (!btn.classList.contains('active')) {
+          setTimeout(autoSend, getRandomInterval(2000, 3000));
+        }
+      });
+    }
   }
 
   // 生成随机数间隔的函数

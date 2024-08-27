@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name         boss直聘 自动打招呼脚本 减少颈椎的劳损 适用于前端开发(内卷找工作)
+// @name         boss直聘 自动和BOSS打招呼脚本
 // @namespace    http://tampermonkey.net/
 // @version      2024-05-30
-// @description  try to take over the world!
+// @description  自动和boss打招呼，减少操作负担。
 // @author       wood
 // @match        https://www.zhipin.com/web/geek/job*
 // @grant        none
 // ==/UserScript==
 
-(function() {
+(function () {
   'use strict';
   window.onload = () => init()
   function init() {
@@ -71,14 +71,14 @@
 
       // 定义黑名单列表
       const blacklist = ['react', 'angular', 'flutter', 'cocos', 'laya', 'lay', '白鹭', 'gis', 'geo', 'webgl', '2d', '3d', '三维', '区块链', '鸿蒙', 'harmonyos', '兼职', '游戏', 'MES', '日结', '大数据',
-      '全栈', '软件', '英语', '口语', '外包', '劳务', '派遣', '驻场', '后端', '后台', 'UI', '设计', '初级', '实习生', 'net', 'c++', 'java', 'go', 'goLang', 'python', 'php', '安卓', '苹果', 'android', 'ios'];
+        '全栈', '软件', '英语', '口语', '外包', '劳务', '派遣', '驻场', '后端', '后台', 'UI', '设计', '初级', '实习生', 'net', 'c++', 'java', 'go', 'goLang', 'python', 'php', '安卓', '苹果', 'android', 'ios'];
 
       // 判断字符串是否在黑名单列表内的函数
       function isInBlacklist(str) {
         // 将字符串转换为小写
         const lowerCaseStr = str.toLowerCase();
         // 使用some()方法遍历黑名单列表，判断是否存在
-        return ["前端","h5","web"].some(keyword => lowerCaseStr.includes(keyword.toLowerCase())) ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
+        return ["前端", "h5", "web"].some(keyword => lowerCaseStr.includes(keyword.toLowerCase())) ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
       }
 
       async function clickButtons() {
@@ -103,7 +103,7 @@
       }
 
       // 点击下一页 触发翻页事件
-      function clickNextPage () {
+      function clickNextPage() {
         let nextPageEle = document.querySelector('.options-pages .ui-icon-arrow-right').closest('a')
         if (!nextPageEle.className.includes('disabled')) { // 如果不是最后一页
           setTimeout(() => nextPageEle.closest('a').click(), 2000)
@@ -138,7 +138,7 @@
         if (!url) url = window.location.href;
         name = name.replace(/[[\]]/g, '\\$&');
         let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-            results = regex.exec(url);
+          results = regex.exec(url);
         if (!results) return null;
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, ' '));

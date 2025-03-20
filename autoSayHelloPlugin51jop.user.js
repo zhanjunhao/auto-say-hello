@@ -34,8 +34,9 @@
           count++;
           // 等待1.5秒后关闭弹出的对话框
           await delay(1500, () => {
-            let closeEle = document.querySelector(".success-popup");
-            isElementDisplayed(closeEle) && closeEle.click();
+            let popupElement = document.querySelector(".success-popup");
+            const closeBtn = popupElement.querySelector(".close-button");
+            isElementDisplayed(closeBtn) && closeBtn.click();
           });
         }
       }

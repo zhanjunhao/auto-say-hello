@@ -70,8 +70,8 @@
       }
 
       // 定义黑名单列表
-      const blacklist = ['react', 'angular', 'flutter', 'cocos', 'laya', 'lay', '白鹭', 'gis', 'geo', 'webgl', '2d', '3d', '三维', '区块链', '鸿蒙', 'harmonyos', '兼职', '游戏', 'MES', '日结', '大数据',
-        '全栈', '软件', '英语', '口语', '外包', '劳务', '派遣', '驻场', '后端', '后台', 'UI', '设计', '初级', '实习生', 'net', 'c++', 'java', 'go', 'goLang', 'python', 'php', '安卓', '苹果', 'android', 'ios'];
+      const blacklist = ['react', 'angular', 'flutter', 'cocos', 'laya', 'lay', '白鹭', 'gis', 'geo', 'webgl', '2d', '3d', '三维', '射频', 'pc', '游戏', 'MES', '大数据', '大模型', 'ai', '区块链', '鸿蒙', 'harmonyos', '外派', '第三方',
+        '全栈', '软件', '英语', '口语', '外包', '劳务', '派遣', '驻场', '后端', '后台', 'UI', '设计', '初级', '实习', '兼职', '日结', '短期', 'net', 'c#', 'c++', 'java', 'go', 'goLang', 'python', 'php', '安卓', '苹果', 'android', 'ios'];
 
       // 判断字符串是否在黑名单列表内的函数
       function isInBlacklist(str) {

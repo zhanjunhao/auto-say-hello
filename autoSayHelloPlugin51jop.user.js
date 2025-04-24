@@ -23,9 +23,9 @@
     let count = 0; // 投递成功的公司数量
     const jobList = document.querySelectorAll(".joblist .joblist-item"); // 获取职位列表
     for (let item of jobList) {
-      const jName = item.querySelector(".joblist-item-top .jname"); // 获取职位名称元素
-      // 如果职位名称包含“前端”，则尝试投递简历
-      if (jName.innerText.indexOf("前端") > -1) {
+      const title = item.querySelector(".joblist-item-top .jname")?.textContent; // 获取职位名称元素
+      // 如果是前端职位，则尝试投递简历
+      if (validateJobTitle(title)) {
         await delay(getRandomInterval(1000, 2000)); // 随机延迟
         const btnEle = item.querySelector(".btn.apply"); // 获取申请按钮元素
         // 如果按钮不是激活状态，则点击按钮
@@ -49,6 +49,57 @@
     }
     // 尝试点击下一页按钮
     clickNextPage();
+  }
+
+  // 岗位名称校验
+  function validateJobTitle(title) {
+    const blacklist = [
+      "react","angular","flutter","cocos","laya","lay","白鹭","gis","geo",
+      "webgl","2d","3d","三维","射频","pc","游戏","MES","大数据","大模型","ai",
+      "区块链","鸿蒙","harmonyos","外派","第三方","全栈","软件","英语","口语","外包",
+      "劳务","派遣","驻场","后端","后台","UI","设计","初级","实习","兼职","日结","短期",
+      "net","c#","c++","java","go","goLang","python","php","安卓","苹果","android","ios"
+    ];
+
+    // 校验黑名单字符
+    function validateBlackstr(str) {
+      return blacklist.some((word) =>
+        str.toLowerCase().includes(word.toLowerCase())
+      );
+    }
+
+    // 必选关键词：前端、web、h5（不区分大小写）
+    const requiredKeywords = /(前端|web|h5)/i;
+
+    // 位置约束：必选词必须出现在字符串的前半部分
+    const halfLength = Math.ceil(title.length / 2);
+    const positionRegex = new RegExp(
+      `^.{0,${halfLength}}?([^]*?(前端|web|h5))`,
+      "iu"
+    );
+
+    // 矛盾职位校验
+    const conflictRoles = /(销售|市场|商务|客服|运营|主播|顾问|代理)/iu;
+
+    // 技术岗位特征校验
+    const techKeywords = /(工程师|开发|架构|技术)/iu;
+
+    // 四重验证逻辑
+    const isBlacklistValid = !validateBlackstr(title);
+    const hasRequiredKeyword = requiredKeywords.test(title);
+    const isPositionValid = positionRegex.test(title);
+    const isRoleValid = !conflictRoles.test(title);
+    const isTechValid = techKeywords.test(title);
+
+    // console.log({
+    //   isBlacklistValid,
+    //   hasRequiredKeyword,
+    //   isPositionValid,
+    //   isRoleValid,
+    //   isTechValid,
+    // });
+
+    return (isBlacklistValid && hasRequiredKeyword && isPositionValid && isRoleValid && isTechValid);
   }
 
   // 点击下一页按钮的函数

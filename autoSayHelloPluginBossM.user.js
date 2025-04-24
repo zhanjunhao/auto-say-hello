@@ -100,14 +100,14 @@
     }
   };
 
-  // 薪资解析器
+  // 检查薪资范围
   function checkSalary(salaryText) {
     if (salaryText.includes("面议")) return true;
-    const match = salaryText.match(/(\d+)(?:-(\d+))?K/);
+    const match = salaryText.match(/(\d+)(?:-(\d+))?k/i); // 忽略大小写
     if (!match) return false;
     const min = parseInt(match[1], 10);
     const max = match[2] ? parseInt(match[2], 10) : min;
-    return min >= CONFIG.MIN_SALARY && max <= CONFIG.MAX_SALARY;
+    return max >= CONFIG.MIN_SALARY && min <= CONFIG.MAX_SALARY; // 判断是否有交集
   }
 
   // 智能滚动控制器

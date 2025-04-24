@@ -4,7 +4,7 @@
 // @version      2025.04.23
 // @description  自动和boss打招呼，减少操作负担。
 // @author       wood
-// @match        https://www.zhipin.com/c101280100/*
+// @match        https://www.zhipin.com/c101280100*
 // @grant        none
 // ==/UserScript==
 
@@ -13,7 +13,7 @@
 
   // 配置参数
   const CONFIG = {
-    MIN_SALARY: 12, 
+    MIN_SALARY: 14, 
     MAX_SALARY: 20,
     SCROLL_OFFSET: 500,
     LOADING_DELAY: 3000,

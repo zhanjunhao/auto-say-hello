@@ -4,160 +4,118 @@
 // @version      2024-05-30
 // @description  自动和boss打招呼，减少操作负担。
 // @author       wood
-// @match        https://www.zhipin.com/web/geek/job*
+// @match        https://www.zhipin.com/web/geek/jobs*
 // @grant        none
 // ==/UserScript==
 
 (function () {
   'use strict';
-  window.onload = () => init()
-  function init() {
-    setTimeout(() => {
-      const minSalary = 14; // 最小薪资
-      const maxSalary = 20; // 最大薪资
 
-      function getRandomInterval(min1, max2) {
-        // 生成一个3000到5000毫秒之间的随机整数
-        const min = min1 || 3000;
-        const max = max2 || 5000;
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+  // 配置参数
+  const CONFIG = {
+    MIN_SALARY: 10, 
+    MAX_SALARY: 20
+  }
+  
+  // 初始化模块
+  window.onload = init;
+  async function init () {
+    const jobItems = [...document.querySelectorAll(".rec-job-list .card-area .job-card-box")].filter(item => !(item.className.includes('is-seen')));
+    for (let jobItem of jobItems) {
+      jobItem.click();
+      await waitForElement('.job-detail-box', getRandomInterval(1000, 3000));
+      const jobName = document.querySelector(".job-detail-box .job-name")?.textContent?.trim();
+      const jobSalary = document.querySelector(".job-detail-box .job-salary")?.textContent?.trim();
+      const opBtnChat = document.querySelector(".job-detail-box .op-btn-chat");
+      if (opBtnChat?.textContent.includes("立即沟通") && validateJobTitle(jobName) && checkSalary(jobSalary)) {
+        opBtnChat.click();
+        opBtnChat.textContent = '继续沟通';
       }
+      await delay(getRandomInterval(3000, 5000));
+    }
+  }
 
-      // 点击按钮触发沟通
-      function triggerSay(btn) {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            let jobInfo = btn.closest('.job-info');
-            if (jobInfo) {
-              let salaryElement = jobInfo.querySelector('.salary');
-              if (salaryElement) {
-                let salaryText = salaryElement.textContent;
-                let salaryRange = isSalaryRangeInRange(salaryText, minSalary, maxSalary);
-                if (salaryRange) {
-                  btn.click();
-                  btn.textContent = "继续沟通";
-                  setTimeout(() => {
-                    let greetBossDialog = document.querySelector(".greet-boss-dialog");
-                    if (greetBossDialog) {
-                      greetBossDialog.remove();
-                    }
-                    resolve(true);
-                  }, 1000);
-                } else {
-                  resolve(false);
-                }
-              }
-            }
-          }, getRandomInterval());
-        });
-      }
+  async function waitForElement(selector, timeout = 5000) {
+    return new Promise((resolve) => {
+      const start = Date.now();
+      const check = () => {
+        const el = document.querySelector(selector);
+        if (el) return resolve(el);
+        if (Date.now() - start > timeout) return resolve(null);
+        requestAnimationFrame(check);
+      };
+      check();
+    });
+  }
 
-      // 判定薪资范围区间
-      function isSalaryRangeInRange(salaryRangeString, min, max) {
-        const regex = /(\d+)-(\d+)(?:K)?/;
-        const match = salaryRangeString.match(regex);
+  // 岗位名称校验
+  function validateJobTitle(title) {
+    const blacklist = [
+      "react","angular","flutter","cocos","laya","lay","白鹭","gis","geo",
+      "webgl","2d","3d","三维","射频","pc","游戏","MES","大数据","大模型","ai",
+      "区块链","鸿蒙","harmonyos","外派","第三方","全栈","软件","英语","口语","外包",
+      "劳务","派遣","驻场","后端","后台","UI","设计","初级","实习","兼职","日结","短期",
+      "net","c#","c++","java","go","goLang","python","php","安卓","苹果","android","ios"
+    ];
 
-        if (match) {
-          const startSalary = parseInt(match[1]);
-          const endSalary = parseInt(match[2]);
+    // 校验黑名单字符
+    function validateBlackstr(str) {
+      return blacklist.some((word) =>
+        str.toLowerCase().includes(word.toLowerCase())
+      );
+    }
 
-          return (startSalary >= min && startSalary <= max) || (endSalary >= min && endSalary <= max);
-        } else if (salaryRangeString === '面议') {
-          return false;
-        } else {
-          return false;
-        }
-      }
+    // 必选关键词：前端、web、h5（不区分大小写）
+    const requiredKeywords = /(前端|web|h5)/i;
 
-      // 定义黑名单列表
-      const blacklist = ['react', 'angular', 'flutter', 'cocos', 'laya', 'lay', '白鹭', 'gis', 'geo', 'webgl', '2d', '3d', '三维', '射频', 'pc', '游戏', 'MES', '大数据', '大模型', 'ai', '区块链', '鸿蒙', 'harmonyos', '外派', '第三方',
-        '全栈', '软件', '英语', '口语', '外包', '劳务', '派遣', '驻场', '后端', '后台', 'UI', '设计', '初级', '实习', '兼职', '日结', '短期', 'net', 'c#', 'c++', 'java', 'go', 'goLang', 'python', 'php', '安卓', '苹果', 'android', 'ios'];
+    // 位置约束：必选词必须出现在字符串的前半部分
+    const halfLength = Math.ceil(title.length / 2);
+    const positionRegex = new RegExp(
+      `^.{0,${halfLength}}?([^]*?(前端|web|h5))`,
+      "iu"
+    );
 
-      // 判断字符串是否在黑名单列表内的函数
-      function isInBlacklist(str) {
-        // 将字符串转换为小写
-        const lowerCaseStr = str.toLowerCase();
-        // 使用some()方法遍历黑名单列表，判断是否存在
-        return ["前端", "h5", "web"].some(keyword => lowerCaseStr.includes(keyword.toLowerCase())) ? blacklist.some(item => lowerCaseStr.includes(item.toLowerCase())) : true;
-      }
+    // 矛盾职位校验
+    const conflictRoles = /(销售|市场|商务|客服|运营|主播|顾问|代理)/iu;
 
-      async function clickButtons() {
-        let count = 0;
-        let btns = [...document.querySelectorAll(".start-chat-btn")].filter(item => !isInBlacklist(item.closest(".job-card-left").querySelector('.job-name').textContent)); // 根据title过滤掉不相干的岗位
-        // console.log(btns);
+    // 技术岗位特征校验
+    const techKeywords = /(工程师|开发|架构|技术)/iu;
 
-        for (let btn of btns) {
-          if (btn.textContent.trim() === '立即沟通') {
-            const result = await triggerSay(btn);
-            result ? count++ : null
-          }
-        }
+    // 四重验证逻辑
+    const isBlacklistValid = !validateBlackstr(title);
+    const hasRequiredKeyword = requiredKeywords.test(title);
+    const isPositionValid = positionRegex.test(title);
+    const isRoleValid = !conflictRoles.test(title);
+    const isTechValid = techKeywords.test(title);
 
-        if (count === 0) {
-          console.log(`本次未匹配到可重新沟通的公司！`);
-        } else {
-          console.log(`本次执行共沟通${count}家公司`);
-        }
+    return (isBlacklistValid && hasRequiredKeyword && isPositionValid && isRoleValid && isTechValid);
+  }
 
-        clickNextPage()
-      }
+  // 检查薪资范围
+  function checkSalary(salaryText) {
+    return true;
+    // if (salaryText.includes("面议")) return true;
+    // const match = salaryText.match(/(\d+)(?:-(\d+))?k/i); // 忽略大小写
+    // if (!match) return false;
+    // const min = parseInt(match[1], 10);
+    // const max = match[2] ? parseInt(match[2], 10) : min;
+    // return max >= CONFIG.MIN_SALARY && min <= CONFIG.MAX_SALARY; // 判断是否有交集
+  }
 
-      // 点击下一页 触发翻页事件
-      function clickNextPage() {
-        let nextPageEle = document.querySelector('.options-pages .ui-icon-arrow-right').closest('a')
-        if (!nextPageEle.className.includes('disabled')) { // 如果不是最后一页
-          setTimeout(() => nextPageEle.closest('a').click(), 2000)
-        } else { // 如果是最后一页了 刷新浏览器重定向到第一页
-          // 剔除 page 参数
-          let parsedUrl = document.createElement('a');
-          parsedUrl.href = window.location.href;
-          let queryParams = parsedUrl.search.substr(1).split('&');
-          let updatedQueryParams = [];
-          for (let i = 0; i < queryParams.length; i++) {
-            let param = queryParams[i];
-            if (param.indexOf('page=') !== 0) {
-              updatedQueryParams.push(param);
-            }
-          }
+  // 延迟执行的函数，接受延迟时间和回调函数
+  function delay(timer, callBack) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        typeof callBack === 'function' && callBack();
+        resolve();
+      }, timer);
+    });
+  }
 
-          // 为 page 参数重新赋值
-          updatedQueryParams.push('page=' + 1);
-          // 重新构建 URL
-          const newUrl = parsedUrl.origin + parsedUrl.pathname + '?' + updatedQueryParams.join('&') + parsedUrl.hash;
-
-          setTimeout(() => {
-            window.location.replace(newUrl);
-          }, getRandomInterval(5000, 10000))
-        }
-      }
-
-      clickButtons();
-
-      // 获取当前 URL 中的 page 参数的值
-      function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[[\]]/g, '\\$&');
-        let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-          results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-      }
-
-      // 保存当前的 page 参数值
-      let currentPage = getParameterByName('page');
-
-      // 检测 page 参数的变化
-      setInterval(() => {
-        let newPage = getParameterByName('page');
-        if (newPage !== currentPage) {
-          console.log('page 参数发生变化：' + currentPage + ' -> ' + newPage);
-          currentPage = newPage;
-          setTimeout(() => {
-            clickButtons();
-          }, 2000)
-        }
-      }, 1000); // 每秒检测一次
-    }, 2000)
+  // 生成随机数间隔的函数
+  function getRandomInterval(min1, max2) {
+    const min = min1 || 3000;
+    const max = max2 || 5000;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 })();

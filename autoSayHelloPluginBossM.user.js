@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Boss直聘移动端自动打招呼脚本
 // @namespace    http://tampermonkey.net/
-// @version      2025.04.23
+// @version      2025.08.06
 // @description  自动和boss打招呼，减少操作负担。
 // @author       wood
 // @match        https://www.zhipin.com/c101280100*
@@ -74,10 +74,12 @@
 
   // 创建统计面板
   const counterDiv = document.createElement("div");
+  counterDiv.className = 'counterDiv',
+  counterDiv.textContent = '成功发送0次';
   counterDiv.style.cssText = `
     position: fixed; bottom: 20px; right: 20px;
     background: rgba(0,200,100,0.8); color: white;
-    padding: 10px 20px; border-radius: 5px; z-index: 9999;
+    padding: 10px 15px; border-radius: 5px; z-index: 9999;
   `;
   document.body.appendChild(counterDiv);
 
@@ -114,6 +116,10 @@
   function autoScrollAndLoad() {
     if (state.isStopped) return;
     if (document.querySelector(CONFIG.LOADMORE_SELECTOR)?.textContent.includes("没有更多了")) {
+      window.scrollTo({
+        top: Number.MAX_SAFE_INTEGER,
+        behavior: "smooth"
+      });
       timerPool.clearAll();
       timerPool.observer?.disconnect();
       state.isStopped = true;
@@ -190,7 +196,7 @@
 
       const timerId = setTimeout(() => {
         buttons[index].click();
-        counterDiv.textContent = `成功发送 ${++state.successCount} 次`;
+        counterDiv.textContent = `成功发送${++state.successCount}次`;
         clickNext(index + 1);
       }, getRandomInterval(1000, 3000));
 
@@ -223,12 +229,16 @@
       if (now - lastScrollTime < 500) return;
       lastScrollTime = now;
 
+      // 检测页面滚动状态：当视口底部接近文档底部（距离底部<500px）时触发加载
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - CONFIG.SCROLL_OFFSET) {
-        state.isLoading = true;
+        // 防重复加载锁
+        state.isLoading = true; 
+        
+        // 延迟执行加载处理（等待页面渲染新数据）
         setTimeout(() => {
-          processPageData();
-          state.isLoading = false;
-        }, CONFIG.LOADING_DELAY);
+          processPageData();  // 处理新加载的职位数据
+          state.isLoading = false; // 解锁加载状态
+        }, CONFIG.LOADING_DELAY); // 延时3000ms(预定义)
       }
     });
 

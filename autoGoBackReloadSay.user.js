@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         自动回退到上一个页面重新沟通
+// @name         返回到上个页面并刷新
 // @namespace    http://tampermonkey.net/
 // @version      2025.04.23
-// @description  自动回退到上一个页面重新沟通
+// @description  返回到上个页面并刷新
 // @author       wood
 // @match        https://www.zhipin.com/job_detail/*
 // @grant        none

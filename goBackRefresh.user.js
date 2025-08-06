@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         返回到上个页面并刷新
 // @namespace    http://tampermonkey.net/
-// @version      2025.04.23
+// @version      2025.08.06
 // @description  返回到上个页面并刷新
 // @author       wood
 // @match        https://www.zhipin.com/job_detail/*

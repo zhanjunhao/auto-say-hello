@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Boss直聘移动端自动打招呼脚本
 // @namespace    http://tampermonkey.net/
-// @version      2025.04.23
+// @version      2025.08.06
 // @description  自动和boss打招呼，减少操作负担。
 // @author       wood
 // @match        https://www.zhipin.com/c101280100*

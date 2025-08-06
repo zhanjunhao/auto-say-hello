@@ -117,7 +117,7 @@
       timerPool.clearAll();
       timerPool.observer?.disconnect();
       state.isStopped = true;
-      return;
+      return refreshPage();
     }
 
     clearTimeout(timerPool.scrollTimer);
@@ -135,6 +135,24 @@
         }
       }).observe(document.body, { childList: true, subtree: true });
     }, getRandomInterval(2000, 3000));
+  }
+
+  // 通用刷新页面方法
+  function refreshPage(force = false) {
+    // 方法1: 使用 location.reload() - 最可靠的方式
+    if (window.location.reload) {
+        if (force) {
+            // 强制刷新（绕过缓存）
+            window.location.reload(true);
+        } else {
+            // 普通刷新（可能使用缓存）
+            window.location.reload();
+        }
+        return;
+    }
+    
+    // 方法2: 重新设置当前URL
+    window.location.href = window.location.href;
   }
 
   // 核心处理器

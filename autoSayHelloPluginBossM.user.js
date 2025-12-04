@@ -13,7 +13,7 @@
 
   // 配置参数
   const CONFIG = {
-    MIN_SALARY: 14, 
+    MIN_SALARY: 16, 
     MAX_SALARY: 20,
     SCROLL_OFFSET: 500,
     LOADING_DELAY: 3000,
@@ -24,7 +24,7 @@
   // 岗位名称校验
   function validateJobTitle(title) {
     const blacklist = [
-      "react","angular","flutter","cocos","laya","lay","白鹭","gis","geo",
+      "react","angular","flutter","cocos","laya","lay","白鹭","gis","geo","unity",
       "webgl","2d","3d","三维","射频","pc","游戏","MES","大数据","大模型","ai",
       "区块链","鸿蒙","harmonyos","外派","第三方","全栈","软件","英语","口语","外包",
       "劳务","派遣","驻场","后端","后台","UI","设计","初级","实习","兼职","日结","短期",

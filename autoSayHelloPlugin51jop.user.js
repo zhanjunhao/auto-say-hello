@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         前程无忧 自动投递简历脚本
+// @name         前程无忧PC端自动投递简历脚本
 // @namespace    http://tampermonkey.net/ 
-// @version      2024-08-27
+// @version      2025.12.29
 // @description  自动投递简历，减少操作负担。
 // @author       wood
 // @match        https://we.51job.com/pc/search*

@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Boss直聘 移动端自动打招呼脚本
+// @name         Boss直聘移动端自动打招呼脚本
 // @namespace    http://tampermonkey.net/
-// @version      2025.08.06
+// @version      2025.12.29
 // @description  自动和boss打招呼，减少操作负担。
 // @author       wood
 // @match        https://www.zhipin.com/c101280100*
@@ -13,7 +13,7 @@
 
   // 配置参数
   const CONFIG = {
-    MIN_SALARY: 15, 
+    MIN_SALARY: 16,
     MAX_SALARY: 30,
     SCROLL_OFFSET: 500,
     LOADING_DELAY: 3000,

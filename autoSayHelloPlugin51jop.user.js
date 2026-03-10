@@ -23,7 +23,7 @@
     let count = 0; // 投递成功的公司数量
     const jobList = document.querySelectorAll(".joblist .joblist-item"); // 获取职位列表
     for (let item of jobList) {
-      const title = item.querySelector(".joblist-item-top .jname")?.textContent; // 获取职位名称元素
+      const title = item.querySelector(".joblist-item-jobname .jname")?.textContent; // 获取职位名称元素
       // 如果是前端职位，则尝试投递简历
       if (validateJobTitle(title)) {
         await delay(getRandomInterval(1000, 2000)); // 随机延迟

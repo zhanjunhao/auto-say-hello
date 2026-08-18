@@ -4,7 +4,7 @@
 // @version      2025.12.29
 // @description  自动和boss打招呼，减少操作负担。
 // @author       wood
-// @match        https://www.zhipin.com/c101280100*
+// @match        *://*.zhipin.com/c101280100*
 // @grant        none
 // ==/UserScript==
 

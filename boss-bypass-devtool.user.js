@@ -1,15 +1,12 @@
 // ==UserScript==
 // @name                BOSS直聘 反反调试 - 阻止跳转空白页
-// @namespace           https://github.com/your-namespace/boss-bypass-devtool
+// @namespace           https://github.com/zhanjunhao/auto-say-hello
 // @version             1.0.0
 // @description         覆盖 BOSS直聘(www/m)的 disable-devtool 反调试跳转行为，用于授权调试
 // @author              your-name
-// @match               *://www.zhipin.com/*
-// @match               *://m.zhipin.com/*
 // @match               *://*.zhipin.com/*
 // @run-at              document-start
 // @grant               none
-// @license             MIT
 // ==/UserScript==
 
 (function () {

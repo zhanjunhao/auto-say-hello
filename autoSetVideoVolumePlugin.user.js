@@ -12,9 +12,9 @@
   'use strict';
 
   // 配置
-  const TARGET_VOLUME = 0.5;          // 目标音量 50%
-  const TARGET_HEIGHT = '50%';        // 音量轨道高度
-  const DEBOUNCE_DELAY = 350;         // 防抖延迟（毫秒）
+  const TARGET_VOLUME = 0.5;                       // 目标音量 50%
+  const TARGET_HEIGHT = `${TARGET_VOLUME * 100}%`; // 音量轨道高度
+  const DEBOUNCE_DELAY = 350;                      // 防抖延迟（毫秒）
 
   // 状态标记
   const ATTR_PROCESSED = 'data-yb-vol-set';

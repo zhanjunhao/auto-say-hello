@@ -35,7 +35,7 @@
         name: '前端开发',
         requiredKeywords: /(前端|web|h5)/i,
         blacklist: [
-          'react', 'angular', 'flutter', 'cocos', 'laya', 'lay', '白鹭',
+          '校招', 'angular', 'flutter', 'cocos', 'laya', 'lay', '白鹭',
           'gis', 'geo', 'unity', 'webgl', '2d', '3d', '三维', '射频',
           'pc', '游戏', 'MES', '大数据', '大模型', 'ai', '区块链',
           '鸿蒙', 'harmonyos', '外派', '第三方', '全栈', '软件',
@@ -63,7 +63,7 @@
           '电话销售', '房产', '保险', '金融销售',
           'cocos', 'unity', 'webgl', '三维',
           '单片机', '嵌入式', '硬件', '射频',
-          '前端', 'web前端', 'h5',
+          '前端', 'web前端', 'h5', '校招',
           '运维', '测试工程师', '功能测试', '自动化测试',
         ],
         conflictRoles: /(销售|市场|商务|客服|运营|主播|顾问|代理|行政|人事|财务)/iu,
